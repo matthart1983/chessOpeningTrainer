@@ -125,6 +125,10 @@ class ChessTrainer {
         // Initialize Stockfish
         this.initStockfish();
         
+        // Apply default styles
+        this.setBoardStyle('blue');
+        this.setPieceStyle('modern');
+        
         // Draw initial board
         this.drawBoard();
         
