@@ -528,16 +528,33 @@ class ChessTrainer {
     analyzeOpponentResponse(bestMove) {
         if (!this.stockfishReady || !this.stockfish) return;
         
+        // Don't analyze response if it's the player's turn (we want to analyze computer's moves)
+        const currentTurn = this.game.turn();
+        const analyzeThis = (this.playerSide === 'white' && currentTurn === 'b') || 
+                           (this.playerSide === 'black' && currentTurn === 'w');
+        
+        if (!analyzeThis) {
+            // Only analyze opponent's response when it's the opponent's move
+            return;
+        }
+        
         // Create a temporary game to analyze the position after the best move
         const tempGame = new Chess(this.game.fen());
         
-        // Try to make the best move
+        // Try to make the best move in UCI format
         const from = bestMove.substring(0, 2);
         const to = bestMove.substring(2, 4);
         const promotion = bestMove.length > 4 ? bestMove[4] : undefined;
         
         try {
-            tempGame.move({ from, to, promotion });
+            // Verify the move is legal before analyzing
+            const move = tempGame.move({ from, to, promotion });
+            
+            if (!move) {
+                console.error('Illegal move for opponent response analysis:', bestMove);
+                this.analyzingResponse = false;
+                return;
+            }
             
             // Now analyze the opponent's best response
             const newFen = tempGame.fen();
