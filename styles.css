@@ -85,12 +85,49 @@ header h1 {
     z-index: 1;
 }
 
+/* Classic Board Style (default) */
 .square.light {
     background-color: #f0d9b5;
 }
 
 .square.dark {
     background-color: #b58863;
+}
+
+/* Blue Board Style */
+#chessboard.board-blue .square.light {
+    background-color: #d4e4f7;
+}
+
+#chessboard.board-blue .square.dark {
+    background-color: #7fa3d1;
+}
+
+/* Green Board Style */
+#chessboard.board-green .square.light {
+    background-color: #e8f5e9;
+}
+
+#chessboard.board-green .square.dark {
+    background-color: #66bb6a;
+}
+
+/* Gray Board Style */
+#chessboard.board-gray .square.light {
+    background-color: #e0e0e0;
+}
+
+#chessboard.board-gray .square.dark {
+    background-color: #757575;
+}
+
+/* Wood Board Style */
+#chessboard.board-wood .square.light {
+    background-color: #d7b899;
+}
+
+#chessboard.board-wood .square.dark {
+    background-color: #8b4513;
 }
 
 .square.selected {
@@ -185,6 +222,20 @@ header h1 {
 
 .square.dark .coordinate-label {
     color: #f0d9b5;
+}
+
+/* Piece Styles */
+/* Modern Piece Style - Slightly larger and with text shadow */
+#chessboard.pieces-modern .square {
+    font-size: 3.2em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Bold Piece Style - Much bolder and cleaner */
+#chessboard.pieces-bold .square {
+    font-size: 3.5em;
+    font-weight: 900;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Animated Piece */

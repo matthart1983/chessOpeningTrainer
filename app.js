@@ -980,6 +980,14 @@ class ChessTrainer {
         document.getElementById('openingChoice').addEventListener('change', (e) => {
             this.setOpening(e.target.value);
         });
+        
+        document.getElementById('boardStyle').addEventListener('change', (e) => {
+            this.setBoardStyle(e.target.value);
+        });
+        
+        document.getElementById('pieceStyle').addEventListener('change', (e) => {
+            this.setPieceStyle(e.target.value);
+        });
     }
     
     setOpening(openingKey) {
@@ -1074,6 +1082,26 @@ class ChessTrainer {
             this.analyzePosition();
             
             this.showFeedback('Last move undone', 'info');
+        }
+    }
+    
+    setBoardStyle(style) {
+        const board = document.getElementById('chessboard');
+        // Remove all board style classes
+        board.classList.remove('board-classic', 'board-blue', 'board-green', 'board-gray', 'board-wood');
+        // Add new style class
+        if (style !== 'classic') {
+            board.classList.add('board-' + style);
+        }
+    }
+    
+    setPieceStyle(style) {
+        const board = document.getElementById('chessboard');
+        // Remove all piece style classes
+        board.classList.remove('pieces-classic', 'pieces-modern', 'pieces-bold');
+        // Add new style class
+        if (style !== 'classic') {
+            board.classList.add('pieces-' + style);
         }
     }
 }
