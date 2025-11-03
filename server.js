@@ -17,6 +17,13 @@ const mimeTypes = {
 const server = http.createServer((req, res) => {
   console.log('Request:', req.method, req.url);
   
+  // Health check endpoint
+  if (req.url === '/health' || req.url === '/healthz') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('OK');
+    return;
+  }
+  
   let filePath = '.' + req.url;
   if (filePath === './') {
     filePath = './index.html';
@@ -53,8 +60,15 @@ const server = http.createServer((req, res) => {
   });
 });
 
+server.on('error', (error) => {
+  console.error('Server error:', error);
+  process.exit(1);
+});
+
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`Server is ready to accept connections`);
+  console.log(`Working directory: ${process.cwd()}`);
+  console.log(`Node version: ${process.version}`);
 });
