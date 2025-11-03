@@ -225,6 +225,39 @@ header h1 {
     box-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
 }
 
+/* Opponent Response Indicator - Source Square (piece to move) */
+.square.opponent-response-from {
+    position: relative;
+    background-color: rgba(231, 76, 60, 0.4) !important;
+    box-shadow: inset 0 0 20px rgba(231, 76, 60, 0.6);
+}
+
+/* Opponent Response Indicator - Destination Square */
+.square.opponent-response-to {
+    position: relative;
+}
+
+.square.opponent-response-to::after {
+    content: '';
+    position: absolute;
+    width: 35%;
+    height: 35%;
+    background-color: rgba(231, 76, 60, 0.8);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.7);
+}
+
+.square.opponent-response-to.has-piece-opponent::after {
+    width: 85%;
+    height: 85%;
+    background-color: transparent;
+    border: 5px solid rgba(231, 76, 60, 0.9);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(231, 76, 60, 0.8);
+}
+
 .square:hover {
     filter: brightness(0.9);
 }

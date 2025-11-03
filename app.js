@@ -15,6 +15,8 @@ class ChessTrainer {
         this.engineCallback = null;
         this.currentBookMove = null; // Stores the next book move (e.g., {from: 'e2', to: 'e4'})
         this.bestMoveSquares = null; // Stores the best engine move (e.g., {from: 'e2', to: 'e4'})
+        this.opponentResponseSquares = null; // Stores opponent's best response to engine move
+        this.analyzingResponse = false; // Flag to track if we're analyzing opponent's response
         
         // Opening lines
         this.openingLines = {
@@ -190,24 +192,39 @@ class ChessTrainer {
         } else if (msg.includes('bestmove')) {
             const match = msg.match(/bestmove ([a-h][1-8][a-h][1-8][qrbn]?)/);
             if (match) {
-                this.bestMove = match[1];
-                
-                // Parse the best move squares for highlighting
                 const moveStr = match[1];
-                this.bestMoveSquares = {
-                    from: moveStr.substring(0, 2),
-                    to: moveStr.substring(2, 4)
-                };
                 
-                this.updateBestMoveUI();
-                this.drawBoard(); // Redraw to show engine move indicator
-                
-                // If we're waiting for the engine, call the callback
-                if (this.waitingForEngine && this.engineCallback) {
-                    this.waitingForEngine = false;
-                    const callback = this.engineCallback;
-                    this.engineCallback = null;
-                    callback(this.bestMove);
+                // If we were analyzing opponent's response
+                if (this.analyzingResponse) {
+                    this.analyzingResponse = false;
+                    this.opponentResponseSquares = {
+                        from: moveStr.substring(0, 2),
+                        to: moveStr.substring(2, 4)
+                    };
+                    this.drawBoard(); // Redraw to show opponent response indicator
+                } else {
+                    // This is the main best move
+                    this.bestMove = moveStr;
+                    
+                    // Parse the best move squares for highlighting
+                    this.bestMoveSquares = {
+                        from: moveStr.substring(0, 2),
+                        to: moveStr.substring(2, 4)
+                    };
+                    
+                    this.updateBestMoveUI();
+                    this.drawBoard(); // Redraw to show engine move indicator
+                    
+                    // Now analyze opponent's best response to this move
+                    this.analyzeOpponentResponse(moveStr);
+                    
+                    // If we're waiting for the engine, call the callback
+                    if (this.waitingForEngine && this.engineCallback) {
+                        this.waitingForEngine = false;
+                        const callback = this.engineCallback;
+                        this.engineCallback = null;
+                        callback(this.bestMove);
+                    }
                 }
             }
         } else if (msg.includes('info') && msg.includes('score')) {
@@ -266,6 +283,37 @@ class ChessTrainer {
         const time = Math.max(1000, this.skillLevel * 200); // Time in milliseconds (1000ms to 4000ms)
         
         this.stockfish.postMessage(`go depth ${depth} movetime ${time}`);
+    }
+    
+    analyzeOpponentResponse(bestMove) {
+        if (!this.stockfishReady || !this.stockfish) return;
+        
+        // Create a temporary game to analyze the position after the best move
+        const tempGame = new Chess(this.game.fen());
+        
+        // Try to make the best move
+        const from = bestMove.substring(0, 2);
+        const to = bestMove.substring(2, 4);
+        const promotion = bestMove.length > 4 ? bestMove[4] : undefined;
+        
+        try {
+            tempGame.move({ from, to, promotion });
+            
+            // Now analyze the opponent's best response
+            const newFen = tempGame.fen();
+            this.analyzingResponse = true;
+            
+            this.stockfish.postMessage(`position fen ${newFen}`);
+            
+            // Quick analysis for opponent's response (shorter time)
+            const depth = Math.max(8, Math.min(18, Math.floor(this.skillLevel)));
+            const time = Math.max(500, this.skillLevel * 100);
+            
+            this.stockfish.postMessage(`go depth ${depth} movetime ${time}`);
+        } catch (e) {
+            console.error('Error analyzing opponent response:', e);
+            this.analyzingResponse = false;
+        }
     }
     
     drawBoard() {
@@ -339,6 +387,21 @@ class ChessTrainer {
                     // Highlight the source square (piece to move)
                     if (squareName === this.bestMoveSquares.from) {
                         squareElement.classList.add('engine-move-from');
+                    }
+                }
+                
+                // Highlight opponent's best response with red indicator
+                if (this.opponentResponseSquares) {
+                    // Highlight the destination square
+                    if (squareName === this.opponentResponseSquares.to) {
+                        squareElement.classList.add('opponent-response-to');
+                        if (square) {
+                            squareElement.classList.add('has-piece-opponent');
+                        }
+                    }
+                    // Highlight the source square (piece to move)
+                    if (squareName === this.opponentResponseSquares.from) {
+                        squareElement.classList.add('opponent-response-from');
                     }
                 }
                 
