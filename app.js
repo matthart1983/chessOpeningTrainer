@@ -14,6 +14,7 @@ class ChessTrainer {
         this.waitingForEngine = false;
         this.engineCallback = null;
         this.currentBookMove = null; // Stores the next book move (e.g., {from: 'e2', to: 'e4'})
+        this.bestMoveSquares = null; // Stores the best engine move (e.g., {from: 'e2', to: 'e4'})
         
         // Opening lines
         this.openingLines = {
@@ -190,7 +191,16 @@ class ChessTrainer {
             const match = msg.match(/bestmove ([a-h][1-8][a-h][1-8][qrbn]?)/);
             if (match) {
                 this.bestMove = match[1];
+                
+                // Parse the best move squares for highlighting
+                const moveStr = match[1];
+                this.bestMoveSquares = {
+                    from: moveStr.substring(0, 2),
+                    to: moveStr.substring(2, 4)
+                };
+                
                 this.updateBestMoveUI();
+                this.drawBoard(); // Redraw to show engine move indicator
                 
                 // If we're waiting for the engine, call the callback
                 if (this.waitingForEngine && this.engineCallback) {
@@ -313,6 +323,21 @@ class ChessTrainer {
                     // Highlight the source square (piece to move)
                     if (squareName === this.currentBookMove.from) {
                         squareElement.classList.add('book-move-from');
+                    }
+                }
+                
+                // Highlight engine best move with blue indicator
+                if (this.bestMoveSquares) {
+                    // Highlight the destination square
+                    if (squareName === this.bestMoveSquares.to) {
+                        squareElement.classList.add('engine-move-to');
+                        if (square) {
+                            squareElement.classList.add('has-piece-engine');
+                        }
+                    }
+                    // Highlight the source square (piece to move)
+                    if (squareName === this.bestMoveSquares.from) {
+                        squareElement.classList.add('engine-move-from');
                     }
                 }
                 
