@@ -95,6 +95,195 @@ class ChessTrainer {
                     fischer: ['e4', 'e5', 'f4', 'exf4', 'Nf3', 'd6', 'd4', 'g5', 'h4', 'g4', 'Ng1', 'Bh6', 'Nc3', 'c6', 'Nge2', 'Qf6', 'Nf4'],
                 },
                 mainLine: 'accepted'
+            },
+            sicilian: {
+                name: 'Sicilian Defense',
+                playerSide: 'black',
+                lines: {
+                    najdorf: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be3', 'e5', 'Nb3', 'Be6', 'f3', 'Be7', 'Qd2', 'O-O', 'O-O-O'],
+                    dragon: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6', 'Be3', 'Bg7', 'f3', 'O-O', 'Qd2', 'Nc6', 'Bc4', 'Bd7', 'O-O-O'],
+                    sveshnikov: ['e4', 'c5', 'Nf3', 'Nc6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'e5', 'Ndb5', 'd6', 'Bg5', 'a6', 'Na3', 'b5', 'Nd5', 'Be7'],
+                    classical: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'Nc6', 'Be2', 'e5', 'Nb3', 'Be7', 'O-O', 'O-O', 'Be3', 'Be6'],
+                    accelerated_dragon: ['e4', 'c5', 'Nf3', 'Nc6', 'd4', 'cxd4', 'Nxd4', 'g6', 'Nc3', 'Bg7', 'Be3', 'Nf6', 'Bc4', 'O-O', 'Bb3', 'd6'],
+                },
+                mainLine: 'najdorf'
+            },
+            french: {
+                name: 'French Defense',
+                playerSide: 'black',
+                lines: {
+                    winawer: ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Bb4', 'e5', 'c5', 'a3', 'Bxc3+', 'bxc3', 'Ne7', 'Qg4', 'O-O', 'Bd3', 'Nbc6', 'Qh5'],
+                    classical: ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e5', 'Nfd7', 'Bxe7', 'Qxe7', 'f4', 'O-O', 'Nf3', 'c5', 'Qd2'],
+                    tarrasch: ['e4', 'e6', 'd4', 'd5', 'Nd2', 'Nf6', 'e5', 'Nfd7', 'Bd3', 'c5', 'c3', 'Nc6', 'Ne2', 'cxd4', 'cxd4', 'f6', 'exf6', 'Nxf6'],
+                    advance: ['e4', 'e6', 'd4', 'd5', 'e5', 'c5', 'c3', 'Nc6', 'Nf3', 'Qb6', 'a3', 'c4', 'Nbd2', 'Na5', 'Be2', 'Bd7', 'O-O'],
+                },
+                mainLine: 'winawer'
+            },
+            carokann: {
+                name: 'Caro-Kann Defense',
+                playerSide: 'black',
+                lines: {
+                    classical: ['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Bf5', 'Ng3', 'Bg6', 'h4', 'h6', 'Nf3', 'Nd7', 'h5', 'Bh7', 'Bd3', 'Bxd3', 'Qxd3'],
+                    advance: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'Nf3', 'e6', 'Be2', 'Nd7', 'O-O', 'Ne7', 'Nbd2', 'h6', 'Nb3', 'Bg6', 'Nfd2'],
+                    exchange: ['e4', 'c6', 'd4', 'd5', 'exd5', 'cxd5', 'Bd3', 'Nc6', 'c3', 'Nf6', 'Bf4', 'Bg4', 'Qb3', 'Na5', 'Qa4+', 'Bd7', 'Qc2'],
+                    panov: ['e4', 'c6', 'd4', 'd5', 'exd5', 'cxd5', 'c4', 'Nf6', 'Nc3', 'Nc6', 'Bg5', 'e6', 'Nf3', 'Be7', 'c5', 'O-O', 'Bb5'],
+                },
+                mainLine: 'classical'
+            },
+            kingsindian: {
+                name: "King's Indian Defense",
+                playerSide: 'black',
+                lines: {
+                    classical: ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6', 'Nf3', 'O-O', 'Be2', 'e5', 'O-O', 'Nc6', 'd5', 'Ne7', 'Ne1', 'Nd7', 'Be3'],
+                    samisch: ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6', 'f3', 'O-O', 'Be3', 'e5', 'Nge2', 'c6', 'Qd2', 'Nbd7', 'Rd1'],
+                    four_pawns: ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6', 'f4', 'O-O', 'Nf3', 'c5', 'd5', 'e6', 'Be2', 'exd5', 'cxd5'],
+                    fianchetto: ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'g3', 'O-O', 'Bg2', 'd6', 'Nf3', 'Nbd7', 'O-O', 'e5', 'e4', 'c6', 'h3'],
+                },
+                mainLine: 'classical'
+            },
+            grunfeld: {
+                name: 'Grünfeld Defense',
+                playerSide: 'black',
+                lines: {
+                    exchange: ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'd5', 'cxd5', 'Nxd5', 'e4', 'Nxc3', 'bxc3', 'Bg7', 'Nf3', 'c5', 'Rb1', 'O-O', 'Be2'],
+                    russian: ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'd5', 'Nf3', 'Bg7', 'Qb3', 'dxc4', 'Qxc4', 'O-O', 'e4', 'Bg4', 'Be3', 'Nfd7', 'Qb3'],
+                    classical: ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'd5', 'Nf3', 'Bg7', 'Qb3', 'dxc4', 'Qxc4', 'O-O', 'e4', 'Na6', 'Be2', 'c5', 'O-O'],
+                },
+                mainLine: 'exchange'
+            },
+            nimzoindian: {
+                name: 'Nimzo-Indian Defense',
+                playerSide: 'black',
+                lines: {
+                    classical: ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'Qc2', 'O-O', 'a3', 'Bxc3+', 'Qxc3', 'b6', 'Bg5', 'Bb7', 'f3', 'd5', 'cxd5'],
+                    rubinstein: ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'e3', 'O-O', 'Bd3', 'd5', 'Nf3', 'c5', 'O-O', 'Nc6', 'a3', 'Bxc3', 'bxc3'],
+                    samisch: ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'a3', 'Bxc3+', 'bxc3', 'c5', 'f3', 'd5', 'cxd5', 'Nxd5', 'dxc5', 'f5', 'e4'],
+                    leningrad: ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'Bg5', 'h6', 'Bh4', 'c5', 'd5', 'b5', 'dxe6', 'fxe6', 'cxb5', 'd5', 'e3'],
+                },
+                mainLine: 'classical'
+            },
+            queensgambit: {
+                name: "Queen's Gambit Declined",
+                playerSide: 'black',
+                lines: {
+                    orthodox: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e3', 'O-O', 'Nf3', 'Nbd7', 'Rc1', 'c6', 'Bd3', 'dxc4', 'Bxc4'],
+                    tartakower: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e3', 'O-O', 'Nf3', 'h6', 'Bh4', 'b6', 'cxd5', 'Nxd5', 'Bxe7', 'Qxe7'],
+                    exchange: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'cxd5', 'exd5', 'Bg5', 'Be7', 'e3', 'c6', 'Bd3', 'Nbd7', 'Qc2', 'O-O', 'Nge2'],
+                    cambridge_springs: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Nbd7', 'e3', 'c6', 'Nf3', 'Qa5', 'Nd2', 'Bb4', 'Qc2', 'O-O'],
+                },
+                mainLine: 'orthodox'
+            },
+            slav: {
+                name: 'Slav Defense',
+                playerSide: 'black',
+                lines: {
+                    main: ['d4', 'd5', 'c4', 'c6', 'Nf3', 'Nf6', 'Nc3', 'dxc4', 'a4', 'Bf5', 'e3', 'e6', 'Bxc4', 'Bb4', 'O-O', 'O-O', 'Qe2'],
+                    exchange: ['d4', 'd5', 'c4', 'c6', 'cxd5', 'cxd5', 'Nc3', 'Nf6', 'Nf3', 'Nc6', 'Bf4', 'Bf5', 'e3', 'e6', 'Bd3', 'Bxd3', 'Qxd3'],
+                    semi_slav: ['d4', 'd5', 'c4', 'c6', 'Nf3', 'Nf6', 'Nc3', 'e6', 'e3', 'Nbd7', 'Qc2', 'Bd6', 'Bd3', 'O-O', 'O-O', 'dxc4', 'Bxc4'],
+                    chameleon: ['d4', 'd5', 'c4', 'c6', 'Nf3', 'Nf6', 'Nc3', 'a6', 'c5', 'Nbd7', 'Bf4', 'Nh5', 'Bd2', 'Nhf6', 'Qc2', 'g6', 'e4'],
+                },
+                mainLine: 'main'
+            },
+            dutch: {
+                name: 'Dutch Defense',
+                playerSide: 'black',
+                lines: {
+                    leningrad: ['d4', 'f5', 'g3', 'Nf6', 'Bg2', 'g6', 'Nf3', 'Bg7', 'O-O', 'O-O', 'c4', 'd6', 'Nc3', 'Qe8', 'd5', 'Na6', 'Rb1'],
+                    stonewall: ['d4', 'f5', 'g3', 'Nf6', 'Bg2', 'e6', 'Nf3', 'Be7', 'O-O', 'O-O', 'c4', 'd5', 'b3', 'c6', 'Ba3', 'Bxa3', 'Nxa3'],
+                    classical: ['d4', 'f5', 'g3', 'Nf6', 'Bg2', 'e6', 'Nf3', 'Be7', 'O-O', 'O-O', 'c4', 'd6', 'Nc3', 'Qe8', 'Qc2', 'Qh5', 'b3'],
+                },
+                mainLine: 'leningrad'
+            },
+            benoni: {
+                name: 'Benoni Defense',
+                playerSide: 'black',
+                lines: {
+                    modern: ['d4', 'Nf6', 'c4', 'c5', 'd5', 'e6', 'Nc3', 'exd5', 'cxd5', 'd6', 'e4', 'g6', 'Nf3', 'Bg7', 'Be2', 'O-O', 'O-O'],
+                    fianchetto: ['d4', 'Nf6', 'c4', 'c5', 'd5', 'e6', 'Nc3', 'exd5', 'cxd5', 'd6', 'Nf3', 'g6', 'g3', 'Bg7', 'Bg2', 'O-O', 'O-O'],
+                    classical: ['d4', 'Nf6', 'c4', 'c5', 'd5', 'e6', 'Nc3', 'exd5', 'cxd5', 'd6', 'e4', 'g6', 'Nf3', 'Bg7', 'Be2', 'O-O', 'O-O', 'Re8'],
+                },
+                mainLine: 'modern'
+            },
+            pirc: {
+                name: 'Pirc Defense',
+                playerSide: 'black',
+                lines: {
+                    austrian: ['e4', 'd6', 'd4', 'Nf6', 'Nc3', 'g6', 'f4', 'Bg7', 'Nf3', 'O-O', 'Bd3', 'Na6', 'O-O', 'c5', 'd5', 'Rb8', 'Qe1'],
+                    classical: ['e4', 'd6', 'd4', 'Nf6', 'Nc3', 'g6', 'Nf3', 'Bg7', 'Be2', 'O-O', 'O-O', 'Bg4', 'Be3', 'Nc6', 'Qd2', 'e5', 'dxe5'],
+                    sveshnikov: ['e4', 'd6', 'd4', 'Nf6', 'Nc3', 'g6', 'g3', 'Bg7', 'Bg2', 'O-O', 'Nge2', 'c6', 'O-O', 'Qa5', 'h3', 'e5', 'Be3'],
+                },
+                mainLine: 'austrian'
+            },
+            alekhine: {
+                name: "Alekhine's Defense",
+                playerSide: 'black',
+                lines: {
+                    four_pawns: ['e4', 'Nf6', 'e5', 'Nd5', 'd4', 'd6', 'c4', 'Nb6', 'f4', 'dxe5', 'fxe5', 'Nc6', 'Be3', 'Bf5', 'Nc3', 'e6', 'Nf3'],
+                    modern: ['e4', 'Nf6', 'e5', 'Nd5', 'd4', 'd6', 'Nf3', 'Bg4', 'Be2', 'e6', 'O-O', 'Be7', 'c4', 'Nb6', 'Nc3', 'O-O', 'Be3'],
+                    exchange: ['e4', 'Nf6', 'e5', 'Nd5', 'd4', 'd6', 'c4', 'Nb6', 'exd6', 'cxd6', 'Nc3', 'g6', 'Be3', 'Bg7', 'Rc1', 'O-O', 'b3'],
+                },
+                mainLine: 'four_pawns'
+            },
+            scandinavian: {
+                name: 'Scandinavian Defense',
+                playerSide: 'black',
+                lines: {
+                    main: ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qa5', 'd4', 'Nf6', 'Nf3', 'Bf5', 'Bc4', 'e6', 'Bd2', 'c6', 'Nd5', 'Qd8', 'Nxf6+', 'Qxf6'],
+                    modern: ['e4', 'd5', 'exd5', 'Nf6', 'd4', 'Nxd5', 'Nf3', 'Bg4', 'Be2', 'e6', 'O-O', 'Be7', 'c4', 'Nb6', 'Nc3', 'O-O', 'Be3'],
+                    portuguese: ['e4', 'd5', 'exd5', 'Nf6', 'd4', 'Bg4', 'f3', 'Bf5', 'Bb5+', 'Nbd7', 'c4', 'e6', 'Nc3', 'exd5', 'cxd5', 'Bd6'],
+                },
+                mainLine: 'main'
+            },
+            budapest: {
+                name: 'Budapest Gambit',
+                playerSide: 'black',
+                lines: {
+                    main: ['d4', 'Nf6', 'c4', 'e5', 'dxe5', 'Ng4', 'Bf4', 'Nc6', 'Nf3', 'Bb4+', 'Nbd2', 'Qe7', 'e3', 'Ngxe5', 'Nxe5', 'Nxe5', 'Be2'],
+                    fajarowicz: ['d4', 'Nf6', 'c4', 'e5', 'dxe5', 'Ne4', 'Nf3', 'Bb4+', 'Nbd2', 'Nc6', 'a3', 'Bxd2+', 'Qxd2', 'Nc5', 'b4', 'Ne6'],
+                    adler: ['d4', 'Nf6', 'c4', 'e5', 'dxe5', 'Ng4', 'Nf3', 'Bc5', 'e3', 'Nc6', 'Nc3', 'Ngxe5', 'Nxe5', 'Nxe5', 'Be2', 'O-O'],
+                },
+                mainLine: 'main'
+            },
+            benko: {
+                name: 'Benko Gambit',
+                playerSide: 'black',
+                lines: {
+                    accepted: ['d4', 'Nf6', 'c4', 'c5', 'd5', 'b5', 'cxb5', 'a6', 'bxa6', 'g6', 'Nc3', 'Bxa6', 'e4', 'Bxf1', 'Kxf1', 'd6', 'Nf3', 'Bg7', 'g3'],
+                    declined: ['d4', 'Nf6', 'c4', 'c5', 'd5', 'b5', 'cxb5', 'a6', 'b6', 'e6', 'Nc3', 'exd5', 'Nxd5', 'Nxd5', 'Qxd5', 'Nc6', 'Qd1'],
+                    fianchetto: ['d4', 'Nf6', 'c4', 'c5', 'd5', 'b5', 'cxb5', 'a6', 'bxa6', 'g6', 'Nc3', 'Bxa6', 'Nf3', 'd6', 'g3', 'Bg7', 'Bg2', 'Nbd7'],
+                },
+                mainLine: 'accepted'
+            },
+            catalanopening: {
+                name: 'Catalan Opening',
+                playerSide: 'white',
+                lines: {
+                    open: ['d4', 'Nf6', 'c4', 'e6', 'g3', 'd5', 'Bg2', 'dxc4', 'Nf3', 'Nc6', 'Qa4', 'Bd7', 'Qxc4', 'Na5', 'Qd3', 'c5', 'O-O'],
+                    closed: ['d4', 'Nf6', 'c4', 'e6', 'g3', 'd5', 'Bg2', 'Be7', 'Nf3', 'O-O', 'O-O', 'dxc4', 'Qc2', 'a6', 'Qxc4', 'b5', 'Qc2'],
+                    classical: ['d4', 'Nf6', 'c4', 'e6', 'g3', 'd5', 'Bg2', 'Be7', 'Nf3', 'O-O', 'O-O', 'Nbd7', 'Qc2', 'c6', 'Nbd2', 'b6', 'e4'],
+                },
+                mainLine: 'open'
+            },
+            englishopening: {
+                name: 'English Opening',
+                playerSide: 'white',
+                lines: {
+                    symmetrical: ['c4', 'c5', 'Nc3', 'Nc6', 'g3', 'g6', 'Bg2', 'Bg7', 'Nf3', 'Nf6', 'O-O', 'O-O', 'd4', 'cxd4', 'Nxd4', 'Nxd4', 'Qxd4'],
+                    reversed_sicilian: ['c4', 'e5', 'Nc3', 'Nf6', 'Nf3', 'Nc6', 'g3', 'd5', 'cxd5', 'Nxd5', 'Bg2', 'Nb6', 'O-O', 'Be7', 'd3', 'O-O'],
+                    four_knights: ['c4', 'Nf6', 'Nc3', 'e5', 'Nf3', 'Nc6', 'g3', 'd5', 'cxd5', 'Nxd5', 'Bg2', 'Nb6', 'O-O', 'Be7', 'd3', 'O-O'],
+                    hedgehog: ['c4', 'c5', 'Nf3', 'Nf6', 'g3', 'b6', 'Bg2', 'Bb7', 'O-O', 'e6', 'Nc3', 'Be7', 'd4', 'cxd4', 'Qxd4', 'd6'],
+                },
+                mainLine: 'symmetrical'
+            },
+            reti: {
+                name: 'Réti Opening',
+                playerSide: 'white',
+                lines: {
+                    main: ['Nf3', 'd5', 'g3', 'Nf6', 'Bg2', 'e6', 'O-O', 'Be7', 'd3', 'O-O', 'Nbd2', 'c5', 'e4', 'Nc6', 'c3', 'b6', 'Re1'],
+                    kings_indian: ['Nf3', 'Nf6', 'g3', 'g6', 'b3', 'Bg7', 'Bb2', 'O-O', 'Bg2', 'd6', 'O-O', 'e5', 'd3', 'Nc6', 'Nbd2', 'h6'],
+                    reversed_benoni: ['Nf3', 'Nf6', 'c4', 'c5', 'Nc3', 'e6', 'g3', 'b6', 'Bg2', 'Bb7', 'O-O', 'Be7', 'd4', 'cxd4', 'Qxd4'],
+                },
+                mainLine: 'main'
             }
         };
         
