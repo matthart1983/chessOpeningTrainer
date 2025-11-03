@@ -872,8 +872,18 @@ class ChessTrainer {
         if (this.moveHistory.length <= maxBookMoves) {
             const expectedMove = expectedMoves[this.moveHistory.length - 1];
             
-            if (expectedMove && (move.san === expectedMove || move.from + move.to === expectedMove.toLowerCase())) {
-                const opening = this.openingLines[this.currentOpening];
+            // Check if move matches expected move (compare both SAN and UCI notation)
+            const moveSan = move.san;
+            const moveUci = move.from + move.to + (move.promotion || '');
+            const expectedUci = expectedMove ? expectedMove.toLowerCase() : '';
+            
+            const isCorrectMove = expectedMove && (
+                moveSan === expectedMove || 
+                moveUci === expectedUci ||
+                moveSan.replace(/[+#]/, '') === expectedMove  // Remove check/checkmate symbols
+            );
+            
+            if (isCorrectMove) {
                 this.showFeedback(`✓ Excellent! That's the main line of the ${opening.name}.`, 'success');
             } else if (expectedMove) {
                 // Check if it's a reasonable alternative
@@ -881,12 +891,10 @@ class ChessTrainer {
                 if (isReasonable) {
                     this.showFeedback('This is a playable alternative, but ' + expectedMove + ' is the main line.', 'info');
                 } else {
-                    const opening = this.openingLines[this.currentOpening];
                     this.showFeedback(`That move deviates from the ${opening.name} principles. Consider ${expectedMove} instead.`, 'warning');
                 }
             } else {
                 // No expected move in book for this position
-                const opening = this.openingLines[this.currentOpening];
                 this.showFeedback(`Developing move. Keep following ${opening.name} principles!`, 'info');
             }
         } else {
