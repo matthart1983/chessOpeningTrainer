@@ -7,9 +7,11 @@ const PORT = process.env.PORT || 3000;
 const mimeTypes = {
   '.html': 'text/html',
   '.js': 'text/javascript',
+  '.mjs': 'text/javascript',
   '.css': 'text/css',
   '.json': 'application/json',
-  '.wasm': 'application/wasm'
+  '.wasm': 'application/wasm',
+  '.mem': 'application/octet-stream'
 };
 
 const server = http.createServer((req, res) => {
@@ -51,6 +53,7 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}/`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
