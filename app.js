@@ -452,11 +452,11 @@ class ChessTrainer {
                         to: moveStr.substring(2, 4)
                     };
                     
+                    // Clear opponent response squares when showing player recommendation
+                    this.opponentResponseSquares = null;
+                    
                     this.updateBestMoveUI();
                     this.drawBoard(); // Redraw to show engine move indicator
-                    
-                    // Now analyze opponent's best response to this move
-                    this.analyzeOpponentResponse(moveStr);
                     
                     // If we're waiting for the engine, call the callback
                     if (this.waitingForEngine && this.engineCallback) {
@@ -795,6 +795,10 @@ class ChessTrainer {
                 // Only check player move feedback for actual player moves
                 if (isPlayerMove) {
                     this.checkPlayerMove(result);
+                } else {
+                    // This is a computer move, analyze opponent's response (what the player should do next)
+                    const moveStr = result.from + result.to + (result.promotion || '');
+                    this.analyzeOpponentResponse(moveStr);
                 }
                 
                 this.drawBoard();
