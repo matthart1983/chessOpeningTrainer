@@ -732,7 +732,7 @@ class ChessTrainer {
                 if (move.promotion) {
                     this.showPromotionDialog(move);
                 } else {
-                    this.makeMove(move);
+                    this.makeMove(move, true); // true = player move
                     this.selectedSquare = null;
                     this.validMoves = [];
                     this.drawBoard();
@@ -779,7 +779,7 @@ class ChessTrainer {
         });
     }
     
-    makeMove(move) {
+    makeMove(move, isPlayerMove = false) {
         const result = this.game.move(move);
         if (result) {
             // Animate the move
@@ -787,7 +787,12 @@ class ChessTrainer {
                 this.moveHistory.push(result.san);
                 this.updateUI();
                 this.analyzePosition();
-                this.checkPlayerMove(result);
+                
+                // Only check player move feedback for actual player moves
+                if (isPlayerMove) {
+                    this.checkPlayerMove(result);
+                }
+                
                 this.drawBoard();
                 
                 // If game is not over and it's computer's turn, make computer move
@@ -1293,7 +1298,7 @@ class ChessTrainer {
                     to: move.to,
                     promotion: piece.type
                 };
-                this.makeMove(promotionMove);
+                this.makeMove(promotionMove, true); // true = player move
                 this.selectedSquare = null;
                 this.validMoves = [];
                 this.drawBoard();
