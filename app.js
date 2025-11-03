@@ -632,8 +632,12 @@ class ChessTrainer {
                     }
                 }
                 
-                // Highlight engine best move with blue indicator
-                if (this.bestMoveSquares) {
+                // Highlight engine best move with blue indicator (only when it's player's turn)
+                const currentTurn = this.game.turn();
+                const isPlayerTurn = (this.playerSide === 'white' && currentTurn === 'w') || 
+                                    (this.playerSide === 'black' && currentTurn === 'b');
+                
+                if (this.bestMoveSquares && isPlayerTurn) {
                     // Highlight the destination square
                     if (squareName === this.bestMoveSquares.to) {
                         squareElement.classList.add('engine-move-to');
@@ -647,8 +651,8 @@ class ChessTrainer {
                     }
                 }
                 
-                // Highlight opponent's best response with red indicator
-                if (this.opponentResponseSquares) {
+                // Highlight opponent's best response with red indicator (only when it's computer's turn)
+                if (this.opponentResponseSquares && !isPlayerTurn) {
                     // Highlight the destination square
                     if (squareName === this.opponentResponseSquares.to) {
                         squareElement.classList.add('opponent-response-to');
