@@ -320,16 +320,18 @@ header h1 {
 .color-key {
     margin-top: 20px;
     padding: 15px;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(0, 0, 0, 0.4);
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
 }
 
 .color-key h3 {
     margin: 0 0 12px 0;
     font-size: 1em;
-    color: #ecf0f1;
+    color: #ffffff;
     font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .key-item {
