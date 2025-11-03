@@ -260,9 +260,10 @@ class ChessTrainer {
         const fen = this.game.fen();
         this.stockfish.postMessage(`position fen ${fen}`);
         
-        // Adjust search depth based on skill level
-        const depth = Math.max(5, Math.min(20, Math.floor(this.skillLevel)));
-        const time = Math.max(100, this.skillLevel * 50); // Time in milliseconds
+        // Adjust search depth and time based on skill level
+        // Higher skill = deeper search and more time
+        const depth = Math.max(10, Math.min(22, Math.floor(this.skillLevel) + 2));
+        const time = Math.max(1000, this.skillLevel * 200); // Time in milliseconds (1000ms to 4000ms)
         
         this.stockfish.postMessage(`go depth ${depth} movetime ${time}`);
     }
@@ -654,7 +655,7 @@ class ChessTrainer {
                     this.engineCallback = null;
                     this.makeRandomMove();
                 }
-            }, 5000);
+            }, 8000);
         } else {
             // Fallback: random legal move
             this.makeRandomMove();
