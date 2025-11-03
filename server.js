@@ -18,6 +18,15 @@ const server = http.createServer((req, res) => {
     filePath = './index.html';
   }
 
+  // Allow serving from node_modules
+  if (!filePath.startsWith('./node_modules/') && !fs.existsSync(filePath)) {
+    // Try to find in node_modules if not found in root
+    const nodeModulesPath = './node_modules' + req.url;
+    if (fs.existsSync(nodeModulesPath)) {
+      filePath = nodeModulesPath;
+    }
+  }
+
   const extname = String(path.extname(filePath)).toLowerCase();
   const contentType = mimeTypes[extname] || 'application/octet-stream';
 
@@ -25,7 +34,7 @@ const server = http.createServer((req, res) => {
     if (error) {
       if (error.code === 'ENOENT') {
         res.writeHead(404);
-        res.end('File not found');
+        res.end('File not found: ' + req.url);
       } else {
         res.writeHead(500);
         res.end('Server error: ' + error.code);
