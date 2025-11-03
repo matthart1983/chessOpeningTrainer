@@ -1359,7 +1359,10 @@ class ChessTrainer {
         
         // Update UI to show which side player is
         const colorDisplay = this.playerSide === 'white' ? '♙ White' : '♟ Black';
-        document.querySelector('.info-section p strong').nextSibling.textContent = colorDisplay;
+        const playerColorSpan = document.getElementById('playerColor');
+        if (playerColorSpan) {
+            playerColorSpan.textContent = colorDisplay;
+        }
         
         // Update opening description
         this.updateOpeningDescription(openingKey);
