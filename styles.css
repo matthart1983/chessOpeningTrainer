@@ -437,6 +437,23 @@ header h1 {
 .info-text {
     font-size: 0.95em;
     text-align: justify;
+    line-height: 1.7;
+}
+
+.opening-description {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.opening-description .info-text {
+    margin: 0;
+}
+
+.opening-description strong {
+    color: #2c3e50;
+    font-size: 1.05em;
 }
 
 .move-history {

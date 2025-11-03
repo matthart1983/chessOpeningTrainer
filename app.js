@@ -287,6 +287,57 @@ class ChessTrainer {
             }
         };
         
+        // Opening descriptions
+        this.openingDescriptions = {
+            philidor: "A solid opening (1.e4 e5 2.Nf3 d6) that prioritizes a strong pawn center and flexible piece development. Named after François-André Danican Philidor, it emphasizes pawn structure over rapid piece activity. The Philidor is known for being solid but passive, often leading to cramped positions for Black. It's an excellent choice for positional players who prefer defensive setups with counterattacking opportunities.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐ (Easy to learn, solid structure)<br><strong>GM Strength:</strong> ⭐⭐ (Passive, limited winning chances)",
+            
+            italian: "One of the oldest recorded chess openings (1.e4 e5 2.Nf3 Nc6 3.Bc4), originating from Italian chess studies in the 16th century. The Italian Game aims for rapid development and central control, targeting the f7 square. It leads to open, tactical positions with opportunities for both sides. Modern variations include the Giuoco Piano (\"Quiet Game\") and the aggressive Evans Gambit, offering diverse strategic plans from classical maneuvering to sharp tactical battles.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐⭐ (Clear development, easy principles)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐ (Solid and flexible, used at all levels)",
+            
+            ruylopez: "Named after 16th-century Spanish priest Ruy López de Segura, this is one of the most popular and deeply analyzed chess openings (1.e4 e5 2.Nf3 Nc6 3.Bb5). The Ruy Lopez aims to pressure Black's center and create long-term positional advantages. It features numerous variations including the solid Closed Defense, the Berlin Wall (popularized by Kramnik), and the sharp Marshall Attack. The opening rewards deep preparation and strategic understanding.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐ (Complex theory, strategic depth)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐⭐ (Most popular 1.e4 opening at top level)",
+            
+            scotch: "An aggressive opening (1.e4 e5 2.Nf3 Nc6 3.d4) that immediately challenges Black's central pawn. The Scotch leads to open positions with active piece play and tactical opportunities. Popular with players like Kasparov, it avoids the heavy theory of the Ruy Lopez while maintaining White's initiative. The opening often results in imbalanced positions where both sides have chances for active play, making it ideal for players who prefer direct confrontation.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐ (Clear plans, active play)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐ (Sound and aggressive, Kasparov's weapon)",
+            
+            kingsgambit: "One of the oldest and most romantic openings (1.e4 e5 2.f4), dating back to the 16th century. The King's Gambit sacrifices material for rapid development and attacking chances against the enemy king. While modern defensive techniques have reduced its popularity at the highest level, it remains a dangerous weapon for aggressive players. The opening can lead to wild tactical positions where calculation and courage are rewarded.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐ (Risky, requires tactical skill)<br><strong>GM Strength:</strong> ⭐⭐ (Unsound against best defense)",
+            
+            london: "A solid and reliable opening system (1.d4 followed by 2.Bf4 and 3.e3) that became popular at the London 1922 tournament. The London System is known for its straightforward development scheme and flexible pawn structure. It's popular at all levels because it leads to playable positions against virtually any Black setup, requires less memorization than sharp variations, and offers White a safe, positional game with long-term pressure.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐⭐ (Easy system, low theory)<br><strong>GM Strength:</strong> ⭐⭐⭐ (Solid but limited winning chances)",
+            
+            queensgambit: "Despite its name, the Queen's Gambit (1.d4 d5 2.c4) is not a true gambit as Black cannot hold the pawn safely. It's one of the oldest and most respected openings, aiming for central control and piece development. The Queen's Gambit Declined is particularly solid, leading to rich positional battles. This opening rewards strategic understanding, proper piece placement, and long-term planning. It remains popular at all levels of chess.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐ (Solid principles, clear structure)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐⭐ (Classical and highly respected)",
+            
+            catalanopening: "A sophisticated opening (1.d4 Nf6 2.c4 e6 3.g3) combining ideas from the Queen's Gambit and the fianchetto of the light-squared bishop. Developed in the 1920s, the Catalan creates subtle pressure on Black's queenside. It's a favorite of world champions for its flexibility and long-term positional advantages. The opening often leads to complex strategic battles where understanding pawn structures and piece coordination is crucial.<br><br><strong>Beginner Strength:</strong> ⭐⭐ (Subtle plans, positional complexity)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐⭐ (World champions' favorite)",
+            
+            englishopening: "A flexible opening (1.c4) named after Howard Staunton, who used it during the 1843 match in England. The English Opening transposes into many different pawn structures and can lead to reversed Sicilian or King's Indian formations. It's popular among positional players who prefer to dictate the game's character based on Black's response. The opening allows White to avoid main-line theory while maintaining flexibility.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐ (Flexible but requires broad knowledge)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐ (Highly flexible, used frequently)",
+            
+            reti: "A hypermodern opening (1.Nf3) named after Czech grandmaster Richard Réti, who revolutionized opening theory in the 1920s. The Réti Opening controls the center from a distance rather than occupying it with pawns. It's extremely flexible and can transpose into various openings including the English, King's Indian Attack, or Catalan. The Réti rewards players with broad opening knowledge and positional understanding.<br><br><strong>Beginner Strength:</strong> ⭐⭐ (Transpositional complexity)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐ (Flexible, avoids main lines)",
+            
+            sicilian: "The most popular defense to 1.e4 at all levels (1.e4 c5), creating immediate imbalance and fighting for the initiative. The Sicilian Defense leads to asymmetrical positions where Black has excellent winning chances. With numerous variations like the Najdorf, Dragon, and Sveshnikov, it offers rich tactical and strategic possibilities. The Sicilian is the weapon of choice for players seeking complex positions and counterattacking opportunities.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐ (Complex, sharp positions)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐⭐ (Most popular defense to 1.e4)",
+            
+            french: "A solid defensive system (1.e4 e6) that leads to strategic, closed positions. The French Defense creates a rigid pawn structure where both sides have clear plans. Black often gets a space disadvantage but gains counterplay on the queenside and center. It's favored by positional players who understand pawn structures and strategic maneuvering. The French has been employed by world champions and remains popular at all levels.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐ (Clear structure, solid plans)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐ (Reliable and strategically rich)",
+            
+            carokann: "A reliable defense (1.e4 c6) known for its solidity and fewer tactical complications compared to the Sicilian. The Caro-Kann leads to positions where Black maintains a solid structure and often equalizes comfortably. It's popular among players who want to avoid sharp tactical battles while maintaining winning chances. The opening has been trusted by world champions and is considered one of Black's most dependable responses to 1.e4.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐⭐ (Solid, safe, easy to learn)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐ (Reliable equalizer)",
+            
+            kingsindian: "A dynamic and aggressive defense (1.d4 Nf6 2.c4 g6 3.Nc3 Bg7) where Black allows White a large pawn center, planning to undermine and attack it later. The King's Indian Defense leads to opposite-side castling and fierce attacking races. It's a favorite of aggressive players and has been employed by world champions like Fischer, Kasparov, and Radjabov. The opening requires precise calculation and attacking intuition.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐ (Complex attacking plans)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐⭐ (Sharp and double-edged)",
+            
+            grunfeld: "A hypermodern defense (1.d4 Nf6 2.c4 g6 3.Nc3 d5) that immediately challenges White's center. Named after Austrian grandmaster Ernst Grünfeld, it leads to sharp, double-edged positions where Black often sacrifices the center for piece activity. The Grünfeld requires precise play and tactical awareness. It's been a weapon of world champions like Fischer, Kasparov, and many modern elite players.<br><br><strong>Beginner Strength:</strong> ⭐⭐ (Tactical complexity, theory-heavy)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐⭐ (Top-level favorite)",
+            
+            nimzoindian: "A sophisticated defense (1.d4 Nf6 2.c4 e6 3.Nc3 Bb4) named after Aron Nimzowitsch, a pioneer of hypermodern chess theory. The Nimzo-Indian pins White's knight and exerts pressure on e4, often leading to strategic battles over central control. It's one of Black's most reliable defenses against 1.d4, offering rich positional play. The opening rewards strategic understanding and has been employed by virtually every world champion.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐ (Strategic complexity)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐⭐ (Universal defense)",
+            
+            slav: "A solid defense (1.d4 d5 2.c4 c6) that supports the d5 pawn while keeping the light-squared bishop active. The Slav Defense offers Black a reliable path to equality with fewer structural weaknesses than the Queen's Gambit Declined. It's popular at all levels for its soundness and strategic clarity. The Slav has many variations ranging from quiet positional play to sharp tactical battles.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐ (Solid and clear)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐ (Reliable and sound)",
+            
+            dutch: "An aggressive defense (1.d4 f5) that immediately stakes a claim to the e4 square and prepares kingside expansion. The Dutch Defense leads to unbalanced positions where Black seeks attacking chances on the kingside while White often targets the weakened king position. It's favored by players seeking complex, fighting positions. The opening requires careful handling but rewards aggressive, attacking play.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐ (Weakening, risky structure)<br><strong>GM Strength:</strong> ⭐⭐⭐ (Sharp but committal)",
+            
+            benoni: "A sharp, counterattacking defense (1.d4 Nf6 2.c4 c5) that creates immediate tension and asymmetrical pawn structures. The Benoni Defense leads to positions where both sides attack on opposite flanks. Black accepts a cramped position for active piece play and queenside counterplay. It's popular among aggressive players who enjoy complex, tactical positions. The Modern Benoni remains a fighting weapon at all levels.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐ (Complex pawn structures)<br><strong>GM Strength:</strong> ⭐⭐⭐ (Fighting but challenging)",
+            
+            budapest: "An aggressive gambit (1.d4 Nf6 2.c4 e5) where Black immediately sacrifices a pawn for rapid development and attacking chances. The Budapest Gambit is relatively rare at the highest level but can be a dangerous surprise weapon. It leads to sharp tactical positions where Black gets active piece play and attacking opportunities if White is unprepared. The gambit requires accurate play from both sides.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐ (Active play, surprise weapon)<br><strong>GM Strength:</strong> ⭐⭐ (Unsound with best play)",
+            
+            benko: "A positional pawn sacrifice (1.d4 Nf6 2.c4 c5 3.d5 b5) where Black gives up the b-pawn for long-term queenside pressure and open files. The Benko Gambit (also called Volga Gambit) offers Black excellent compensation through active piece play and strategic pressure. It's popular among players who understand positional compensation and enjoy strategic maneuvering. The Benko can lead to long, complex strategic battles.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐ (Positional understanding needed)<br><strong>GM Strength:</strong> ⭐⭐⭐ (Interesting but limited)",
+            
+            pirc: "A flexible, hypermodern defense (1.e4 d6 2.d4 Nf6 3.Nc3 g6) where Black allows White to establish a pawn center before counterattacking. The Pirc Defense often transposes into similar positions as the King's Indian Defense. It's known for its flexibility and ability to create complex, asymmetrical positions. The opening rewards players who understand pawn breaks and tactical opportunities in closed positions.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐ (Flexible but passive early)<br><strong>GM Strength:</strong> ⭐⭐⭐ (Solid sideline)",
+            
+            alekhine: "A provocative defense (1.e4 Nf6) named after world champion Alexander Alekhine, where Black's knight invites White's pawns forward. Alekhine's Defense leads to positions where Black aims to demonstrate that White's extended pawn center is a target rather than a strength. It's a sharp, complex opening that requires precise play. The Alekhine is favored by players seeking unbalanced positions with mutual chances.<br><br><strong>Beginner Strength:</strong> ⭐⭐ (Risky, counterintuitive)<br><strong>GM Strength:</strong> ⭐⭐⭐ (Sharp surprise weapon)",
+            
+            scandinavian: "One of the oldest recorded openings (1.e4 d5), immediately challenging White's central pawn. The Scandinavian Defense leads to early queen development after 2.exd5 Qxd5, giving White a small lead in development. However, Black gets a solid position with clear development plans. It's popular at club level for its straightforward ideas and reduced theoretical burden. The Scandinavian offers Black a reliable path to playable positions.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐ (Simple, straightforward)<br><strong>GM Strength:</strong> ⭐⭐ (Passive, limited potential)"
+        };
+        
         this.currentOpening = 'philidor';
         this.currentLine = 'main';
         this.moveHistory = [];
@@ -1293,11 +1344,28 @@ class ChessTrainer {
         const colorDisplay = this.playerSide === 'white' ? '♙ White' : '♟ Black';
         document.querySelector('.info-section p strong').nextSibling.textContent = colorDisplay;
         
+        // Update opening description
+        this.updateOpeningDescription(openingKey);
+        
         this.showFeedback(`Training ${opening.name} as ${this.playerSide.charAt(0).toUpperCase() + this.playerSide.slice(1)}`, 'info');
         
         // If player is white, they start; if black, computer starts
         if (this.playerSide === 'black') {
             setTimeout(() => this.makeComputerMove(), 300);
+        }
+    }
+    
+    updateOpeningDescription(openingKey) {
+        const description = this.openingDescriptions[openingKey];
+        const opening = this.openingLines[openingKey];
+        const descriptionDiv = document.getElementById('openingDescription');
+        
+        if (description && descriptionDiv) {
+            descriptionDiv.innerHTML = `
+                <p class="info-text">
+                    <strong>${opening.name}:</strong> ${description}
+                </p>
+            `;
         }
     }
     
