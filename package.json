@@ -1,0 +1,18 @@
+{
+  "name": "chess-philidor-trainer",
+  "version": "1.0.0",
+  "description": "Chess opening trainer focused on the Philidor Defense with Stockfish integration",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["chess", "philidor", "training", "stockfish"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chess.js": "^1.0.0-beta.8",
+    "stockfish.js": "^10.0.2"
+  },
+  "devDependencies": {}
+}

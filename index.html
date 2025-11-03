@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philidor Defense Trainer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Chess Opening Trainer</h1>
+            <p class="subtitle">Master your favorite openings with Stockfish analysis</p>
+        </header>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="board-container">
+                    <div id="chessboard"></div>
+                </div>
+                
+                <div class="controls">
+                    <button id="newGame" class="btn btn-primary">New Game</button>
+                    <button id="flipBoard" class="btn btn-secondary">Flip Board</button>
+                    <button id="getHint" class="btn btn-info">Get Hint</button>
+                    <button id="undoMove" class="btn btn-warning">Undo Move</button>
+                </div>
+                
+                <div class="skill-level-control">
+                    <label for="openingChoice"><strong>Opening:</strong></label>
+                    <select id="openingChoice" class="skill-select">
+                        <option value="philidor">Philidor Defense (as Black)</option>
+                        <option value="london">London System (as White)</option>
+                        <option value="italian">Italian Game (as White)</option>
+                        <option value="ruylopez">Ruy Lopez (as White)</option>
+                        <option value="scotch">Scotch Opening (as White)</option>
+                        <option value="kingsgambit">King's Gambit (as White)</option>
+                    </select>
+                </div>
+                
+                <div class="skill-level-control">
+                    <label for="skillLevel"><strong>Stockfish Level:</strong></label>
+                    <select id="skillLevel" class="skill-select">
+                        <option value="1">Level 1 - Beginner (~800 ELO)</option>
+                        <option value="3">Level 3 - Novice (~1000 ELO)</option>
+                        <option value="5">Level 5 - Intermediate (~1300 ELO)</option>
+                        <option value="10">Level 10 - Advanced (~1700 ELO)</option>
+                        <option value="15">Level 15 - Expert (~2100 ELO)</option>
+                        <option value="20" selected>Level 20 - Master (~2500 ELO)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="info-section">
+                    <h2>Game Status</h2>
+                    <p><strong>You are playing:</strong> <span style="font-size: 1.3em;">♟ Black</span></p>
+                    <p><strong>Side to move:</strong> <span id="sideToMove">White</span></p>
+                    <p><strong>Move number:</strong> <span id="moveNumber">1</span></p>
+                    <p><strong>Position:</strong> <span id="position">Starting</span></p>
+                </div>
+
+                <div class="info-section">
+                    <h2>Stockfish Analysis</h2>
+                    <p><strong>Evaluation:</strong> <span id="evaluation">+0.2</span></p>
+                    <p><strong>Best Move:</strong> <span id="bestMove">-</span></p>
+                    <p><strong>Depth:</strong> <span id="depth">-</span></p>
+                </div>
+
+                <div class="info-section">
+                    <h2>Move History</h2>
+                    <div id="moveHistory" class="move-history"></div>
+                </div>
+
+                <div class="info-section">
+                    <h2>Training Info</h2>
+                    <div id="feedback" class="feedback"></div>
+                    <div id="nextBookMove" class="next-move-hint"></div>
+                </div>
+
+                <div class="info-section">
+                    <h2>About the Opening</h2>
+                    <div id="openingDescription">
+                        <p class="info-text">
+                            <strong>Philidor Defense:</strong> A solid opening (1.e4 e5 2.Nf3 d6) focusing on maintaining a strong pawn center.
+                        </p>
+                        <p class="info-text">
+                            <strong>London System:</strong> A reliable system (1.d4 followed by 2.Bf4) with a solid setup and flexible play.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Use local chess.js -->
+    <script type="module">
+        import { Chess } from './node_modules/chess.js/dist/esm/chess.js';
+        window.Chess = Chess;
+        
+        // Load real Stockfish engine
+        window.STOCKFISH = function() {
+            // Create a Web Worker with Stockfish
+            const worker = new Worker('./node_modules/stockfish.js/stockfish.js');
+            return worker;
+        };
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
