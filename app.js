@@ -439,9 +439,11 @@ class ChessTrainer {
             const match = msg.match(/bestmove ([a-h][1-8][a-h][1-8][qrbn]?)/);
             if (match) {
                 const moveStr = match[1];
+                console.log('Best move received:', moveStr, 'waitingForEngine:', this.waitingForEngine, 'analyzingResponse:', this.analyzingResponse);
                 
                 // If we were analyzing opponent's response
                 if (this.analyzingResponse) {
+                    console.log('Setting opponent response squares:', moveStr);
                     this.analyzingResponse = false;
                     this.opponentResponseSquares = {
                         from: moveStr.substring(0, 2),
@@ -451,6 +453,7 @@ class ChessTrainer {
                 } else {
                     // This is the main best move
                     this.bestMove = moveStr;
+                    console.log('Setting best move for player recommendation:', moveStr);
                     
                     // Parse the best move squares for highlighting
                     this.bestMoveSquares = {
@@ -466,6 +469,7 @@ class ChessTrainer {
                     
                     // If we're waiting for the engine, call the callback
                     if (this.waitingForEngine && this.engineCallback) {
+                        console.log('Computer will play move:', moveStr);
                         this.waitingForEngine = false;
                         const callback = this.engineCallback;
                         this.engineCallback = null;
@@ -519,9 +523,13 @@ class ChessTrainer {
     }
     
     analyzePosition() {
-        if (!this.stockfishReady || !this.stockfish) return;
+        if (!this.stockfishReady || !this.stockfish) {
+            console.log('Stockfish not ready, skipping analysis');
+            return;
+        }
         
         const fen = this.game.fen();
+        console.log('Analyzing position:', fen);
         this.stockfish.postMessage(`position fen ${fen}`);
         
         // Adjust search depth and time based on skill level
@@ -529,6 +537,7 @@ class ChessTrainer {
         const depth = Math.max(10, Math.min(22, Math.floor(this.skillLevel) + 2));
         const time = Math.max(1000, this.skillLevel * 200); // Time in milliseconds (1000ms to 4000ms)
         
+        console.log(`Requesting analysis: depth ${depth}, time ${time}ms, skill level ${this.skillLevel}`);
         this.stockfish.postMessage(`go depth ${depth} movetime ${time}`);
     }
     
@@ -944,10 +953,15 @@ class ChessTrainer {
     }
     
     makeComputerMove() {
+        console.log('=== makeComputerMove called ===');
         const gameOver = this.game.isGameOver ? this.game.isGameOver() : this.game.game_over();
-        if (gameOver) return;
+        if (gameOver) {
+            console.log('Game is over, not making move');
+            return;
+        }
         
         const moveNumber = Math.floor(this.moveHistory.length / 2);
+        console.log('Move number:', moveNumber, 'Move history length:', this.moveHistory.length);
         
         // For lower skill levels, sometimes deviate from book moves
         const shouldUseBook = this.skillLevel >= 15 || Math.random() > (20 - this.skillLevel) / 30;
