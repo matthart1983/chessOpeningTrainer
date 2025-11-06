@@ -539,7 +539,7 @@ class ChessTrainer {
         }
     }
     
-    analyzePosition() {
+    analyzePosition(forComputerMove = false) {
         if (!this.stockfishReady || !this.stockfish) {
             console.log('Stockfish not ready, skipping analysis');
             return;
@@ -547,16 +547,23 @@ class ChessTrainer {
         
         const fen = this.game.fen();
         this.lastAnalyzedFen = fen; // Cache the position being analyzed
-        console.log('Analyzing position:', fen);
+        console.log('Analyzing position:', fen, 'forComputerMove:', forComputerMove);
         this.stockfish.postMessage(`position fen ${fen}`);
         
-        // Adjust search depth and time based on skill level
-        // Higher skill = deeper search and more time
-        const depth = Math.max(10, Math.min(22, Math.floor(this.skillLevel) + 2));
-        const time = Math.max(1000, this.skillLevel * 200); // Time in milliseconds (1000ms to 5000ms)
-        
-        console.log(`Requesting analysis: depth ${depth}, time ${time}ms, skill level ${this.skillLevel}`);
-        this.stockfish.postMessage(`go depth ${depth} movetime ${time}`);
+        if (forComputerMove) {
+            // For computer moves, use movetime only (no depth limit)
+            // This ensures Stockfish will stop after the time limit
+            const time = Math.max(2000, Math.min(8000, this.skillLevel * 300)); // 2-8 seconds based on skill
+            console.log(`Computer move analysis: movetime ${time}ms, skill level ${this.skillLevel}`);
+            this.stockfish.postMessage(`go movetime ${time}`);
+        } else {
+            // For player analysis (showing best move), use depth and time
+            const depth = Math.max(10, Math.min(22, Math.floor(this.skillLevel) + 2));
+            const time = Math.max(1000, this.skillLevel * 200); // Time in milliseconds (1000ms to 5000ms)
+            
+            console.log(`Player move analysis: depth ${depth}, time ${time}ms, skill level ${this.skillLevel}`);
+            this.stockfish.postMessage(`go depth ${depth} movetime ${time}`);
+        }
     }
     
     analyzeOpponentResponse(bestMove) {
@@ -1101,7 +1108,7 @@ class ChessTrainer {
             };
             
             // Request analysis
-            this.analyzePosition();
+            this.analyzePosition(true); // Pass true to indicate this is for computer move
             
             // Timeout fallback (in case engine doesn't respond)
             // Give engine 10 seconds, then send stop command to force a response
