@@ -423,8 +423,14 @@ class ChessTrainer {
         if (msg === 'uciok') {
             console.log('UCI protocol initialized');
             // Configure Stockfish
-            this.stockfish.postMessage('setoption name UCI_LimitStrength value true');
-            this.stockfish.postMessage(`setoption name UCI_Elo value ${this.getEloForSkillLevel(this.skillLevel)}`);
+            if (this.skillLevel < 25) {
+                // Use strength limiting for levels 1-20
+                this.stockfish.postMessage('setoption name UCI_LimitStrength value true');
+                this.stockfish.postMessage(`setoption name UCI_Elo value ${this.getEloForSkillLevel(this.skillLevel)}`);
+            } else {
+                // Level 25: Full strength, no limiting
+                this.stockfish.postMessage('setoption name UCI_LimitStrength value false');
+            }
             this.stockfish.postMessage('isready');
         } else if (msg === 'readyok') {
             this.stockfishReady = true;
@@ -480,7 +486,8 @@ class ChessTrainer {
             5: 1300,
             10: 1700,
             15: 2100,
-            20: 2500
+            20: 2500,
+            25: 3500  // Maximum strength (not actually limited by ELO)
         };
         return eloMap[level] || 1500;
     }
@@ -1414,13 +1421,20 @@ class ChessTrainer {
         this.skillLevel = level;
         
         if (this.stockfish && this.stockfishReady) {
-            const elo = this.getEloForSkillLevel(level);
-            this.stockfish.postMessage('setoption name UCI_LimitStrength value true');
-            this.stockfish.postMessage(`setoption name UCI_Elo value ${elo}`);
-            this.showFeedback(`Stockfish level set to ${level} (~${elo} ELO)`, 'info');
+            if (level < 25) {
+                // Use strength limiting for levels 1-20
+                const elo = this.getEloForSkillLevel(level);
+                this.stockfish.postMessage('setoption name UCI_LimitStrength value true');
+                this.stockfish.postMessage(`setoption name UCI_Elo value ${elo}`);
+                this.showFeedback(`Stockfish level set to ${level} (~${elo} ELO)`, 'info');
+            } else {
+                // Level 25: Full strength, no limiting
+                this.stockfish.postMessage('setoption name UCI_LimitStrength value false');
+                this.showFeedback(`Stockfish level set to ${level} (Maximum Strength - Super GM)`, 'info');
+            }
         }
         
-        console.log('Skill level set to:', level, 'ELO:', this.getEloForSkillLevel(level));
+        console.log('Skill level set to:', level, level < 25 ? 'ELO: ' + this.getEloForSkillLevel(level) : 'Maximum Strength');
     }
     
     newGame() {
