@@ -797,7 +797,16 @@ class ChessTrainer {
             this.animateMove(result.from, result.to, () => {
                 this.moveHistory.push(result.san);
                 this.updateUI();
-                this.analyzePosition();
+                
+                // Only analyze position for player recommendations on player's turn
+                const currentTurn = this.game.turn();
+                const isPlayerTurn = (this.playerSide === 'white' && currentTurn === 'w') || 
+                                    (this.playerSide === 'black' && currentTurn === 'b');
+                
+                if (isPlayerTurn) {
+                    // Analyze position to show player recommendations
+                    this.analyzePosition();
+                }
                 
                 // Only check player move feedback for actual player moves
                 if (isPlayerMove) {
