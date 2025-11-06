@@ -10,6 +10,7 @@ class ChessTrainer {
         this.stockfishReady = false;
         this.currentEvaluation = 0;
         this.bestMove = null;
+        this.lastAnalyzedFen = null; // Store the FEN of the last analyzed position
         this.skillLevel = 20; // Default skill level
         this.waitingForEngine = false;
         this.engineCallback = null;
@@ -529,13 +530,14 @@ class ChessTrainer {
         }
         
         const fen = this.game.fen();
+        this.lastAnalyzedFen = fen; // Cache the position being analyzed
         console.log('Analyzing position:', fen);
         this.stockfish.postMessage(`position fen ${fen}`);
         
         // Adjust search depth and time based on skill level
         // Higher skill = deeper search and more time
         const depth = Math.max(10, Math.min(22, Math.floor(this.skillLevel) + 2));
-        const time = Math.max(1000, this.skillLevel * 200); // Time in milliseconds (1000ms to 4000ms)
+        const time = Math.max(1000, this.skillLevel * 200); // Time in milliseconds (1000ms to 5000ms)
         
         console.log(`Requesting analysis: depth ${depth}, time ${time}ms, skill level ${this.skillLevel}`);
         this.stockfish.postMessage(`go depth ${depth} movetime ${time}`);
@@ -1019,14 +1021,41 @@ class ChessTrainer {
             this.analyzePosition();
             
             // Timeout fallback (in case engine doesn't respond)
+            // Extended timeout: 20 seconds for slower engines
             setTimeout(() => {
                 if (this.waitingForEngine) {
-                    console.warn('Engine timeout, making random move');
+                    console.warn('Engine timeout after 20 seconds');
                     this.waitingForEngine = false;
                     this.engineCallback = null;
+                    
+                    // Try to use cached best move if it's from the current position
+                    const currentFen = this.game.fen();
+                    if (this.bestMove && this.lastAnalyzedFen === currentFen) {
+                        console.log('Using cached best move from current position:', this.bestMove);
+                        const moves = this.game.moves({ verbose: true });
+                        const move = moves.find(m => 
+                            m.from + m.to === this.bestMove.substring(0, 4)
+                        );
+                        
+                        if (move) {
+                            console.log('Cached move is legal, using it');
+                            setTimeout(() => {
+                                this.makeMove(move);
+                                this.drawBoard();
+                            }, 300);
+                            return;
+                        } else {
+                            console.log('Cached move is not legal in current position');
+                        }
+                    } else if (this.bestMove) {
+                        console.log('Cached move exists but is from a different position (stale)');
+                    }
+                    
+                    // Fallback to random move if no valid cached move available
+                    console.warn('No valid cached move available, making random move');
                     this.makeRandomMove();
                 }
-            }, 8000);
+            }, 20000); // 20 second timeout (increased from 8 seconds)
         } else {
             // Fallback: random legal move
             this.makeRandomMove();
