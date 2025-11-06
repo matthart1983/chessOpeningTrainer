@@ -10,6 +10,7 @@ class ChessTrainer {
         this.stockfishReady = false;
         this.currentEvaluation = 0;
         this.bestMove = null;
+        this.bestMoveForComputer = null; // Cached move specifically for computer fallback
         this.lastAnalyzedFen = null; // Store the FEN of the last analyzed position
         this.skillLevel = 20; // Default skill level
         this.waitingForEngine = false;
@@ -463,7 +464,13 @@ class ChessTrainer {
                 } else {
                     // This is the main best move
                     this.bestMove = moveStr;
-                    console.log('Setting best move for player recommendation:', moveStr);
+                    console.log('Setting best move:', moveStr, 'waitingForEngine:', this.waitingForEngine);
+                    
+                    // If waiting for engine (computer's turn), also cache for fallback
+                    if (this.waitingForEngine) {
+                        this.bestMoveForComputer = moveStr;
+                        console.log('Cached move for computer fallback:', moveStr);
+                    }
                     
                     // Parse the best move squares for highlighting
                     this.bestMoveSquares = {
@@ -1097,28 +1104,38 @@ class ChessTrainer {
             this.analyzePosition();
             
             // Timeout fallback (in case engine doesn't respond)
-            // Extended timeout: 20 seconds for slower engines
+            // Give engine 10 seconds, then send stop command to force a response
+            setTimeout(() => {
+                if (this.waitingForEngine && this.stockfish) {
+                    console.warn('Engine taking too long, sending stop command');
+                    this.stockfish.postMessage('stop');
+                }
+            }, 10000); // Send stop after 10 seconds
+            
+            // Final timeout if stop command doesn't work
             setTimeout(() => {
                 if (this.waitingForEngine) {
-                    console.warn('Engine timeout after 20 seconds');
+                    console.warn('Engine timeout after 15 seconds, using fallback');
                     this.waitingForEngine = false;
                     this.engineCallback = null;
                     
-                    // Try to use cached best move if it's from the current position
+                    // Try to use cached computer move if it's from the current position
                     const currentFen = this.game.fen();
-                    if (this.bestMove && this.lastAnalyzedFen === currentFen) {
-                        console.log('Using cached best move from current position:', this.bestMove);
+                    if (this.bestMoveForComputer && this.lastAnalyzedFen === currentFen) {
+                        console.log('Using cached computer move from current position:', this.bestMoveForComputer);
                         const moves = this.game.moves({ verbose: true });
                         const move = moves.find(m => 
-                            m.from + m.to === this.bestMove.substring(0, 4)
+                            m.from + m.to === this.bestMoveForComputer.substring(0, 4)
                         );
                         
                         if (move) {
                             // Check if the cached move is a blunder
                             if (this.isBlunder(move)) {
                                 console.warn('Cached move appears to be a blunder, using random move instead');
+                                this.bestMoveForComputer = null; // Clear bad cached move
                             } else {
                                 console.log('Cached move passed blunder check, using it');
+                                this.bestMoveForComputer = null; // Clear after use
                                 setTimeout(() => {
                                     this.makeMove(move);
                                     this.drawBoard();
@@ -1126,17 +1143,19 @@ class ChessTrainer {
                                 return;
                             }
                         } else {
-                            console.log('Cached move is not legal in current position');
+                            console.log('Cached computer move is not legal in current position');
+                            this.bestMoveForComputer = null; // Clear invalid cached move
                         }
-                    } else if (this.bestMove) {
-                        console.log('Cached move exists but is from a different position (stale)');
+                    } else if (this.bestMoveForComputer) {
+                        console.log('Cached computer move exists but is from a different position (stale)');
+                        this.bestMoveForComputer = null; // Clear stale move
                     }
                     
                     // Fallback to random move if no valid cached move available
                     console.warn('No valid cached move available, making random move');
                     this.makeRandomMove();
                 }
-            }, 20000); // 20 second timeout (increased from 8 seconds)
+            }, 15000); // 15 second final timeout (5s analysis + 10s for stop command)
         } else {
             // Fallback: random legal move
             this.makeRandomMove();
