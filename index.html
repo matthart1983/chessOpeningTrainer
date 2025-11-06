@@ -160,9 +160,36 @@
         
         // Load Stockfish 17.1 engine (lite single-threaded version)
         window.STOCKFISH = function() {
-            // Create a Web Worker with Stockfish 17.1
-            const worker = new Worker('./node_modules/stockfish/src/stockfish-17.1-lite-single-03e3232.js');
-            return worker;
+            try {
+                console.log('Creating Stockfish worker...');
+                // Get the absolute URL to the Stockfish script
+                const scriptPath = new URL('./node_modules/stockfish/src/stockfish-17.1-lite-single-03e3232.js', window.location.href);
+                console.log('Stockfish script path:', scriptPath.href);
+                
+                // Create a Web Worker with Stockfish 17.1
+                const worker = new Worker(scriptPath.href);
+                console.log('Stockfish worker created successfully');
+                
+                worker.onerror = function(error) {
+                    console.error('Worker error event:', error);
+                    console.error('Error details:', error.message, error.filename, error.lineno, error.colno);
+                };
+                
+                worker.onmessage = function(e) {
+                    console.log('Worker message:', e.data);
+                };
+                
+                // Send initial test message
+                setTimeout(() => {
+                    console.log('Sending test message to worker...');
+                    worker.postMessage('uci');
+                }, 100);
+                
+                return worker;
+            } catch (error) {
+                console.error('Failed to create Stockfish worker:', error);
+                throw error;
+            }
         };
     </script>
     <script type="module" src="app.js"></script>
