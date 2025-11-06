@@ -158,21 +158,17 @@
         import { Chess } from './node_modules/chess.js/dist/esm/chess.js';
         window.Chess = Chess;
         
-        // Load Stockfish 17.1 engine (ASM.js version for maximum compatibility)
+        // Load Stockfish 10 engine (stable version)
         window.STOCKFISH = function() {
             try {
-                console.log('Creating Stockfish worker (ASM.js version)...');
-                // Use ASM.js version - pure JavaScript, no WASM issues
-                const scriptPath = new URL('./node_modules/stockfish/src/stockfish-17.1-asm-341ff22.js', window.location.href);
-                console.log('Stockfish script path:', scriptPath.href);
-                
-                // Create a Web Worker with Stockfish 17.1
-                const worker = new Worker(scriptPath.href);
+                console.log('Creating Stockfish 10 worker...');
+                // Use stockfish.js v10 - stable and compatible
+                const worker = new Worker('./node_modules/stockfish.js/stockfish.js');
                 console.log('Stockfish worker created successfully');
                 
                 worker.onerror = function(error) {
                     console.error('Worker error event:', error);
-                    console.error('Error details:', error.message, error.filename, error.lineno, error.colno);
+                    console.error('Error details:', error.message);
                 };
                 
                 return worker;
