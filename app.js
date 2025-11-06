@@ -15,6 +15,7 @@ class ChessTrainer {
         this.skillLevel = 20; // Default skill level
         this.waitingForEngine = false;
         this.engineCallback = null;
+        this.engineAttempts = 0; // Track number of engine attempts for current move
         this.currentBookMove = null; // Stores the next book move (e.g., {from: 'e2', to: 'e4'})
         this.bestMoveSquares = null; // Stores the best engine move (e.g., {from: 'e2', to: 'e4'})
         this.opponentResponseSquares = null; // Stores opponent's best response to engine move
@@ -1052,6 +1053,11 @@ class ChessTrainer {
         const moveNumber = Math.floor(this.moveHistory.length / 2);
         console.log('Move number:', moveNumber, 'Move history length:', this.moveHistory.length);
         
+        // Reset attempt counter at the start of a new move (only if not already retrying)
+        if (!this.waitingForEngine) {
+            this.engineAttempts = 0;
+        }
+        
         // For free play mode, skip book moves entirely
         if (this.currentOpening !== 'freeplay') {
             // For lower skill levels, sometimes deviate from book moves
@@ -1088,9 +1094,12 @@ class ChessTrainer {
         // Use Stockfish to get best move
         if (this.stockfishReady && this.stockfish) {
             this.waitingForEngine = true;
+            this.engineAttempts++; // Increment attempt counter
+            console.log(`Engine attempt ${this.engineAttempts} of 3`);
             
             // Set up callback for when engine responds
             this.engineCallback = (bestMove) => {
+                this.engineAttempts = 0; // Reset attempts on success
                 const moves = this.game.moves({ verbose: true });
                 const move = moves.find(m => 
                     m.from + m.to === bestMove.substring(0, 4)
@@ -1122,9 +1131,22 @@ class ChessTrainer {
             // Final timeout if stop command doesn't work
             setTimeout(() => {
                 if (this.waitingForEngine) {
-                    console.warn('Engine timeout after 15 seconds, using fallback');
+                    console.warn(`Engine timeout after 15 seconds (attempt ${this.engineAttempts} of 3)`);
                     this.waitingForEngine = false;
                     this.engineCallback = null;
+                    
+                    // Retry up to 3 times before falling back
+                    if (this.engineAttempts < 3) {
+                        console.log(`Retrying engine request (attempt ${this.engineAttempts + 1} of 3)...`);
+                        setTimeout(() => {
+                            this.makeComputerMove(); // Recursive retry
+                        }, 500);
+                        return;
+                    }
+                    
+                    // After 3 failed attempts, use fallback
+                    console.warn('All 3 engine attempts failed, using fallback');
+                    this.engineAttempts = 0; // Reset for next move
                     
                     // Try to use cached computer move if it's from the current position
                     const currentFen = this.game.fen();
