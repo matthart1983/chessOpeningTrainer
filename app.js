@@ -1166,19 +1166,34 @@ class ChessTrainer {
         // Update position description
         const moveCount = this.moveHistory.length;
         const opening = this.openingLines[this.currentOpening];
-        const maxBookMoves = opening.lines[this.currentLine].length;
+        
+        // For free play mode, there are no book moves
+        const maxBookMoves = this.currentOpening === 'freeplay' ? 0 : 
+                            opening.lines[this.currentLine].length;
         
         let positionText = 'Starting position';
-        if (moveCount > 0 && moveCount <= 4) {
-            positionText = 'Opening moves';
-        } else if (moveCount >= 5 && moveCount <= 10) {
-            positionText = `Early ${opening.name}`;
-        } else if (moveCount > 10 && moveCount <= maxBookMoves) {
-            positionText = `${opening.name} development`;
-        } else if (moveCount > maxBookMoves && moveCount <= maxBookMoves + 6) {
-            positionText = 'Leaving book moves';
+        if (this.currentOpening === 'freeplay') {
+            // Free play position descriptions
+            if (moveCount > 0 && moveCount <= 10) {
+                positionText = 'Opening phase';
+            } else if (moveCount > 10 && moveCount <= 20) {
+                positionText = 'Early middle game';
+            } else if (moveCount > 20) {
+                positionText = 'Middle game';
+            }
         } else {
-            positionText = 'Middle game';
+            // Opening book position descriptions
+            if (moveCount > 0 && moveCount <= 4) {
+                positionText = 'Opening moves';
+            } else if (moveCount >= 5 && moveCount <= 10) {
+                positionText = `Early ${opening.name}`;
+            } else if (moveCount > 10 && moveCount <= maxBookMoves) {
+                positionText = `${opening.name} development`;
+            } else if (moveCount > maxBookMoves && moveCount <= maxBookMoves + 6) {
+                positionText = 'Leaving book moves';
+            } else {
+                positionText = 'Middle game';
+            }
         }
         document.getElementById('position').textContent = positionText;
         
@@ -1256,6 +1271,13 @@ class ChessTrainer {
     
     updateNextBookMove() {
         const nextMoveElement = document.getElementById('nextBookMove');
+        
+        // For free play mode, don't show book moves
+        if (this.currentOpening === 'freeplay') {
+            nextMoveElement.innerHTML = '<p style="color: #7f8c8d; font-style: italic;">Free play - no book moves</p>';
+            this.currentBookMove = null;
+            return;
+        }
         
         const opening = this.openingLines[this.currentOpening];
         const expectedMoves = opening.lines[this.currentLine];
