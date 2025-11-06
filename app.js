@@ -21,6 +21,13 @@ class ChessTrainer {
         
         // Opening lines
         this.openingLines = {
+            freeplay: {
+                name: 'Free Play (No Opening Book)',
+                playerSide: 'white', // Default to white, can be changed
+                lines: {},
+                mainLine: null,
+                description: 'Practice chess without opening book restrictions. All moves are allowed.'
+            },
             philidor: {
                 name: 'Philidor Defense',
                 playerSide: 'black',
@@ -290,6 +297,8 @@ class ChessTrainer {
         
         // Opening descriptions
         this.openingDescriptions = {
+            freeplay: "Practice chess without any opening book restrictions. All moves are accepted and the computer will respond with its best calculated moves. Choose this mode to explore different positions, test ideas, or practice general chess skills without following specific opening lines.<br><br><strong>Features:</strong> No book moves enforced, all moves accepted, engine plays best move<br><strong>Ideal for:</strong> Experimentation, creativity, general practice",
+            
             philidor: "A solid opening (1.e4 e5 2.Nf3 d6) that prioritizes a strong pawn center and flexible piece development. Named after François-André Danican Philidor, it emphasizes pawn structure over rapid piece activity. The Philidor is known for being solid but passive, often leading to cramped positions for Black. It's an excellent choice for positional players who prefer defensive setups with counterattacking opportunities.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐ (Easy to learn, solid structure)<br><strong>GM Strength:</strong> ⭐⭐ (Passive, limited winning chances)<br><strong>Famous Players:</strong> François-André Philidor, Bent Larsen, Étienne Bacrot",
             
             italian: "One of the oldest recorded chess openings (1.e4 e5 2.Nf3 Nc6 3.Bc4), originating from Italian chess studies in the 16th century. The Italian Game aims for rapid development and central control, targeting the f7 square. It leads to open, tactical positions with opportunities for both sides. Modern variations include the Giuoco Piano (\"Quiet Game\") and the aggressive Evans Gambit, offering diverse strategic plans from classical maneuvering to sharp tactical battles.<br><br><strong>Beginner Strength:</strong> ⭐⭐⭐⭐⭐ (Clear development, easy principles)<br><strong>GM Strength:</strong> ⭐⭐⭐⭐ (Solid and flexible, used at all levels)<br><strong>Famous Players:</strong> Anatoly Karpov, Viswanathan Anand, Magnus Carlsen, Fabiano Caruana",
@@ -904,6 +913,12 @@ class ChessTrainer {
         const moveNumber = Math.floor(this.moveHistory.length / 2);
         const isBlackMove = this.moveHistory.length % 2 === 0;
         
+        // Check if we're in free play mode
+        if (this.currentOpening === 'freeplay') {
+            this.showFeedback('Free play mode - all moves accepted!', 'info');
+            return;
+        }
+        
         // Check if we're still in the opening phase
         const opening = this.openingLines[this.currentOpening];
         const expectedMoves = opening.lines[this.currentLine];
@@ -1023,32 +1038,35 @@ class ChessTrainer {
         const moveNumber = Math.floor(this.moveHistory.length / 2);
         console.log('Move number:', moveNumber, 'Move history length:', this.moveHistory.length);
         
-        // For lower skill levels, sometimes deviate from book moves
-        const shouldUseBook = this.skillLevel >= 15 || Math.random() > (20 - this.skillLevel) / 30;
-        
-        // Get max book moves for current line
-        const opening = this.openingLines[this.currentOpening];
-        const expectedMoves = opening.lines[this.currentLine];
-        const maxBookMoves = expectedMoves.length;
-        
-        // Play from the opening book (if high skill or lucky)
-        if (this.moveHistory.length < maxBookMoves && shouldUseBook) {
-            const bookMove = expectedMoves[this.moveHistory.length];
+        // For free play mode, skip book moves entirely
+        if (this.currentOpening !== 'freeplay') {
+            // For lower skill levels, sometimes deviate from book moves
+            const shouldUseBook = this.skillLevel >= 15 || Math.random() > (20 - this.skillLevel) / 30;
             
-            if (bookMove) {
-                const moves = this.game.moves({ verbose: true });
-                const move = moves.find(m => 
-                    m.san === bookMove || 
-                    m.from + m.to === bookMove.toLowerCase() ||
-                    m.san.replace(/[+#]/, '') === bookMove
-                );
+            // Get max book moves for current line
+            const opening = this.openingLines[this.currentOpening];
+            const expectedMoves = opening.lines[this.currentLine];
+            const maxBookMoves = expectedMoves.length;
+            
+            // Play from the opening book (if high skill or lucky)
+            if (this.moveHistory.length < maxBookMoves && shouldUseBook) {
+                const bookMove = expectedMoves[this.moveHistory.length];
                 
-                if (move) {
-                    setTimeout(() => {
-                        this.makeMove(move);
-                        this.drawBoard();
-                    }, 300);
-                    return;
+                if (bookMove) {
+                    const moves = this.game.moves({ verbose: true });
+                    const move = moves.find(m => 
+                        m.san === bookMove || 
+                        m.from + m.to === bookMove.toLowerCase() ||
+                        m.san.replace(/[+#]/, '') === bookMove
+                    );
+                    
+                    if (move) {
+                        setTimeout(() => {
+                            this.makeMove(move);
+                            this.drawBoard();
+                        }, 300);
+                        return;
+                    }
                 }
             }
         }
@@ -1487,7 +1505,9 @@ class ChessTrainer {
         this.currentOpening = openingKey;
         const opening = this.openingLines[openingKey];
         this.playerSide = opening.playerSide;
-        this.currentLine = opening.mainLine;
+        
+        // For free play mode, set mainLine to an empty string to avoid undefined errors
+        this.currentLine = opening.mainLine || '';
         
         // Set board orientation
         this.boardFlipped = (this.playerSide === 'black');
