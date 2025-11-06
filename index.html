@@ -157,10 +157,10 @@
         import { Chess } from './node_modules/chess.js/dist/esm/chess.js';
         window.Chess = Chess;
         
-        // Load real Stockfish engine
+        // Load Stockfish 17.1 engine (lite single-threaded version)
         window.STOCKFISH = function() {
-            // Create a Web Worker with Stockfish
-            const worker = new Worker('./node_modules/stockfish.js/stockfish.js');
+            // Create a Web Worker with Stockfish 17.1
+            const worker = new Worker('./node_modules/stockfish/src/stockfish-17.1-lite-single-03e3232.js');
             return worker;
         };
     </script>
