@@ -954,6 +954,64 @@ class ChessTrainer {
         return false;
     }
     
+    // Check if a move would be a blunder (causes evaluation to drop significantly)
+    isBlunder(move) {
+        // Create a temporary game to test the move
+        const tempGame = new Chess(this.game.fen());
+        const result = tempGame.move(move);
+        
+        if (!result) {
+            console.log('Move is illegal, definitely a blunder');
+            return true;
+        }
+        
+        // Get current evaluation (from the side to move perspective)
+        const currentEval = this.currentEvaluation;
+        
+        // Simple heuristic: a move that loses material or loses position
+        // For a more accurate check, we'd need to analyze the position after the move
+        // But as a quick check, we can look for captures that lose material
+        
+        // Check if we're giving away a piece
+        if (result.captured) {
+            const pieceValues = {p: 1, n: 3, b: 3, r: 5, q: 9, k: 0};
+            const ourPieceValue = pieceValues[result.piece] || 0;
+            const capturedValue = pieceValues[result.captured] || 0;
+            
+            // If we capture but our piece is worth more, might be a blunder
+            if (ourPieceValue > capturedValue + 1) {
+                console.log(`Potential blunder: trading ${result.piece} for ${result.captured}`);
+                return true;
+            }
+        }
+        
+        // Check for hanging pieces (piece moves to attacked square)
+        // This is a simple check - in reality would need full position analysis
+        const attacks = tempGame.moves({ verbose: true, square: result.to });
+        if (attacks && attacks.length > 0) {
+            // Square is attacked by opponent
+            const pieceValues = {p: 1, n: 3, b: 3, r: 5, q: 9, k: 0};
+            const ourPieceValue = pieceValues[result.piece] || 0;
+            
+            // Check if we have defenders
+            tempGame.undo();
+            const defenders = tempGame.moves({ verbose: true }).filter(m => 
+                m.to === result.to && m.from !== result.from
+            );
+            
+            if (defenders.length === 0 && ourPieceValue > 1) {
+                console.log(`Potential blunder: ${result.piece} on ${result.to} is hanging`);
+                return true;
+            }
+        }
+        
+        // If evaluation exists and drops by more than 2 pawns, it's likely a blunder
+        // Note: This is a rough heuristic since we don't have the eval after the move
+        // In a real implementation, we'd analyze the position after the move
+        
+        return false; // Not detected as obvious blunder
+    }
+    
     makeComputerMove() {
         console.log('=== makeComputerMove called ===');
         const gameOver = this.game.isGameOver ? this.game.isGameOver() : this.game.game_over();
@@ -1038,12 +1096,17 @@ class ChessTrainer {
                         );
                         
                         if (move) {
-                            console.log('Cached move is legal, using it');
-                            setTimeout(() => {
-                                this.makeMove(move);
-                                this.drawBoard();
-                            }, 300);
-                            return;
+                            // Check if the cached move is a blunder
+                            if (this.isBlunder(move)) {
+                                console.warn('Cached move appears to be a blunder, using random move instead');
+                            } else {
+                                console.log('Cached move passed blunder check, using it');
+                                setTimeout(() => {
+                                    this.makeMove(move);
+                                    this.drawBoard();
+                                }, 300);
+                                return;
+                            }
                         } else {
                             console.log('Cached move is not legal in current position');
                         }
